@@ -17,37 +17,36 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Java 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Gradle 8.9
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      - name: Find Android SDK Manager
+      - name: Locate Android SDK
         shell: bash
         run: |
-          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -n 1)
-          echo "SDKMANAGER=$SDKMANAGER" >> "$GITHUB_ENV"
-          echo "Found SDK Manager"
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)
+          echo "SDKMAN=$SDKMAN" >> "$GITHUB_ENV"
+          echo "SDK Manager located"
 
-      - name: Accept SDK Licenses
-        run: yes | "$SDKMANAGER" --licenses || true
+      - name: Install SDK Platform
+        shell: bash
+        run: |
+          "$SDKMAN" --install "platforms;android-35"
 
-      - name: Install Android Platform
-        run: "$SDKMANAGER" --install 'platforms;android-35'
+      - name: Install Build Tools
+        shell: bash
+        run: |
+          "$SDKMAN" --install "build-tools;35.0.0"
 
-      - name: Install Android Build Tools
-        run: "$SDKMANAGER" --install 'build-tools;35.0.0'
-
-      - name: Install Platform Tools
-        run: "$SDKMAN" --install 'platform-tools'
-
-      - name: Build Debug APK
+      - name: Build APK
         run: gradle assembleDebug
 
       - name: Upload APK
