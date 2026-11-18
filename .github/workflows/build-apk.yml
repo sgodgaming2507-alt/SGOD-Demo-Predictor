@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -28,23 +28,17 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Locate Android SDK
+      - name: Install Android SDK packages
         shell: bash
         run: |
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)
-          echo "SDKMAN=$SDKMAN" >> "$GITHUB_ENV"
-          echo "SDK Manager located"
-
-      - name: Install SDK Platform
-        shell: bash
-        run: |
-          "$SDKMAN" --install "platforms;android-35"
-
-      - name: Install Build Tools
-        shell: bash
-        run: |
-          "$SDKMAN" --install "build-tools;35.0.0"
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -n 1)"
+          echo "SDK Manager: $SDKMANAGER"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "SDK Manager not found"
+            exit 1
+          fi
+          yes | "$SDKMAN" --licenses || true
+          "$SDKMAN" --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
       - name: Build APK
         run: gradle assembleDebug
