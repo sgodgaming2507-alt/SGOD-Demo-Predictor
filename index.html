@@ -1,242 +1,216 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>S_GOD Number Simulator</title>
+
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#12071f">
 
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:#05030b;
-  color:#fff;
-  font-family:Arial,sans-serif;
-  padding:15px;
-  background-image:
-    radial-gradient(ellipse at top,#28104c 0%,transparent 45%),
-    radial-gradient(ellipse at bottom,#071b42 0%,transparent 45%);
+ margin:0;
+ min-height:100vh;
+ padding:15px;
+ color:#fff;
+ font-family:Arial,sans-serif;
+ background:
+ radial-gradient(ellipse at top,#35135b 0%,transparent 50%),
+ radial-gradient(ellipse at bottom,#081d44 0%,transparent 50%),
+ #05030b;
 }
 .app{max-width:480px;margin:auto}
 .header{
-  border:1px solid #9b4dff;
-  border-radius:18px;
-  padding:18px;
-  text-align:center;
-  background:linear-gradient(145deg,#170c28,#080610);
-  box-shadow:0 0 20px #852aff44;
+ text-align:center;padding:20px 12px;
+ border:1px solid #9b4dff;border-radius:20px;
+ background:linear-gradient(145deg,#1b0d2c,#080610);
+ box-shadow:0 0 20px #852aff35;
 }
 .logo{
-  font-size:35px;font-weight:900;font-style:italic;
-  color:#c58aff;text-shadow:0 0 20px #a000ff;
+ font-size:38px;font-weight:900;font-style:italic;
+ color:#d1a2ff;text-shadow:0 0 18px #a000ff;
 }
-.sub{color:#b6a0d5;letter-spacing:3px;font-size:11px}
+.sub{font-size:11px;letter-spacing:3px;color:#b6a0d5;margin-top:5px}
 .tag{
-  display:inline-block;margin-top:12px;
-  background:#281542;color:#d5aaff;
-  border:1px solid #8e40ff;border-radius:30px;
-  padding:7px 14px;font-size:11px;
+ display:inline-block;margin-top:15px;padding:8px 15px;
+ background:#281542;color:#d5aaff;border:1px solid #8e40ff;
+ border-radius:30px;font-size:11px;
 }
 .panel{
-  background:linear-gradient(145deg,#151020,#08070d);
-  border:1px solid #7835be;
-  border-radius:17px;
-  padding:17px;margin-top:14px;
-  box-shadow:0 0 14px #7d20cf20;
+ background:linear-gradient(145deg,#151020,#08070d);
+ border:1px solid #7835be;border-radius:17px;
+ padding:17px;margin-top:15px;
+ box-shadow:0 0 15px #7d20cf18;
 }
 .label{
-  color:#b88aff;font-size:12px;
-  letter-spacing:2px;text-align:center;
+ color:#b88aff;font-size:12px;letter-spacing:2px;text-align:center;
 }
-.period{
-  font-size:19px;font-weight:bold;
-  text-align:center;margin-top:12px;
-  word-break:break-all;color:#fff;
+.round{
+ text-align:center;font-size:23px;font-weight:bold;
+ margin-top:12px;color:#fff;
 }
-.timer-wrap{
-  display:flex;justify-content:center;margin:18px 0;
-}
+.timer-wrap{display:flex;justify-content:center;margin:20px 0}
 .timer{
-  width:175px;height:175px;border-radius:50%;
-  border:7px solid #7124c9;
-  outline:3px solid #281449;
-  display:flex;flex-direction:column;
-  justify-content:center;align-items:center;
-  box-shadow:0 0 25px #902eff66,inset 0 0 25px #671cba33;
+ width:175px;height:175px;border-radius:50%;
+ border:7px solid #7124c9;outline:3px solid #281449;
+ display:flex;flex-direction:column;justify-content:center;align-items:center;
+ box-shadow:0 0 25px #902eff55,inset 0 0 25px #671cba33;
 }
 .timer-caption{font-size:11px;color:#bd93ff;letter-spacing:2px}
 .time{font-size:43px;font-weight:900;margin:7px 0}
-.result-box{
-  text-align:center;
-  padding:24px 10px;
-  border-radius:14px;
-  background:linear-gradient(145deg,#170b28,#07060d);
-  border:1px solid #9b45ff;
+.result{
+ text-align:center;padding:22px 10px;border-radius:15px;
+ background:linear-gradient(145deg,#170b28,#07060d);
+ border:1px solid #9b45ff;margin-top:14px;
 }
 .number{
-  font-size:90px;font-weight:900;
-  line-height:1.1;
-  color:#d9a5ff;
-  text-shadow:0 0 22px #9900ff;
+ font-size:100px;font-weight:900;line-height:1.1;
+ color:#d9a5ff;text-shadow:0 0 24px #9900ff;
 }
-.result-caption{font-size:12px;color:#a98bd3;letter-spacing:3px}
-.status-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;
-}
+.caption{font-size:11px;color:#a98bd3;letter-spacing:2px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .status{
-  background:#0d0b14;border:1px solid #36214e;
-  border-radius:12px;padding:13px;text-align:center;
+ background:#0d0b14;border:1px solid #36214e;
+ border-radius:12px;padding:13px;text-align:center;
 }
-.status-title{font-size:10px;color:#9f85c5;letter-spacing:1px}
-.status-value{font-weight:bold;color:#c98aff;margin-top:7px;font-size:13px}
+.stitle{font-size:10px;color:#9f85c5;letter-spacing:1px}
+.svalue{font-weight:bold;color:#c98aff;margin-top:7px;font-size:13px}
 .history-title{font-size:12px;color:#c38cff;letter-spacing:2px}
-.history-list{margin-top:12px}
-.history-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:11px;border-bottom:1px solid #241a31;font-size:12px;
+.history{margin-top:12px}
+.row{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:12px 5px;border-bottom:1px solid #241a31;font-size:12px;
 }
-.history-num{font-size:20px;font-weight:bold;color:#d7aaff}
+.hnum{font-size:22px;font-weight:bold;color:#d7aaff}
 .footer{text-align:center;padding:20px;color:#795b9b;font-size:11px;letter-spacing:2px}
-.disclaimer{text-align:center;color:#76658e;font-size:10px;margin-top:12px}
+.note{text-align:center;color:#76658e;font-size:10px;margin-top:10px}
 </style>
 </head>
 
 <body>
 <div class="app">
 
-  <div class="header">
-    <div class="logo">S_GOD</div>
-    <div style="font-size:20px;font-weight:bold">NUMBER SIMULATOR</div>
-    <div class="sub">DIGITAL DEMO • NEON EDITION</div>
-    <div class="tag">● SIMULATION MODE ACTIVE</div>
+<div class="header">
+ <div class="logo">S_GOD</div>
+ <div style="font-size:20px;font-weight:bold">NUMBER SIMULATOR</div>
+ <div class="sub">NEON EDITION</div>
+ <div class="tag">● RANDOM DEMO MODE</div>
+</div>
+
+<div class="panel">
+ <div class="label">DEMO ROUND</div>
+ <div class="round" id="round">0001</div>
+</div>
+
+<div class="timer-wrap">
+ <div class="timer">
+  <div class="timer-caption">TIME LEFT</div>
+  <div class="time" id="timer">01:00</div>
+  <div class="timer-caption">SECONDS</div>
+ </div>
+</div>
+
+<div class="panel">
+ <div class="label">RANDOM NUMBER</div>
+ <div class="result">
+  <div class="number" id="number">0</div>
+  <div class="caption">SIMULATED VALUE • 0–9</div>
+ </div>
+
+ <div class="grid">
+  <div class="status">
+   <div class="stitle">SYSTEM</div>
+   <div class="svalue">READY</div>
   </div>
-
-  <div class="panel">
-    <div class="label">CURRENT DEMO PERIOD</div>
-    <div class="period" id="period">--</div>
+  <div class="status">
+   <div class="stitle">MODE</div>
+   <div class="svalue">SIMULATION</div>
   </div>
+ </div>
+</div>
 
-  <div class="timer-wrap">
-    <div class="timer">
-      <div class="timer-caption">TIME LEFT</div>
-      <div class="time" id="timer">01:00</div>
-      <div class="timer-caption">SECONDS</div>
-    </div>
-  </div>
+<div class="panel">
+ <div class="history-title">◈ RECENT DEMO NUMBERS</div>
+ <div class="history" id="history"></div>
+</div>
 
-  <div class="panel">
-    <div class="label">RANDOM NUMBER DISPLAY</div>
-    <div class="result-box" style="margin-top:14px">
-      <div class="number" id="number">--</div>
-      <div class="result-caption">SIMULATED NUMBER • 0–9</div>
-    </div>
-
-    <div class="status-grid">
-      <div class="status">
-        <div class="status-title">SYSTEM</div>
-        <div class="status-value">READY</div>
-      </div>
-      <div class="status">
-        <div class="status-title">MODE</div>
-        <div class="status-value">DEMO ONLY</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel">
-    <div class="history-title">◈ DEMO HISTORY</div>
-    <div class="history-list" id="history">
-      <div class="history-row">Waiting for first demo cycle...</div>
-    </div>
-  </div>
-
-  <div class="footer">POWERED BY S_GOD</div>
-  <div class="disclaimer">Independent random simulation • Not real-world predictions</div>
-
+<div class="footer">POWERED BY S_GOD</div>
+<div class="note">Random simulation only • No real-world predictions</div>
 </div>
 
 <script>
-const PERIOD_LENGTH = 60;
+const ROUND_SECONDS = 60;
 
-let remaining = PERIOD_LENGTH;
-let cycle = 1;
+let remaining = ROUND_SECONDS;
+let round = 1;
 let historyData = [];
 
-function makePeriod(){
-  const now = new Date();
-  const date = now.getFullYear().toString()
-    + String(now.getMonth()+1).padStart(2,'0')
-    + String(now.getDate()).padStart(2,'0');
-
-  return date + String(cycle).padStart(6,'0');
-}
-
-function updatePeriod(){
-  document.getElementById("period").textContent = makePeriod();
-}
+const timerEl = document.getElementById("timer");
+const numberEl = document.getElementById("number");
+const roundEl = document.getElementById("round");
+const historyEl = document.getElementById("history");
 
 function updateTimer(){
-  const m = String(Math.floor(remaining/60)).padStart(2,'0');
-  const s = String(remaining%60).padStart(2,'0');
-  document.getElementById("timer").textContent = m+":"+s;
+ const mins = String(Math.floor(remaining/60)).padStart(2,"0");
+ const secs = String(remaining%60).padStart(2,"0");
+ timerEl.textContent = mins + ":" + secs;
 }
 
-function generateDemoNumber(){
-  // Random demo value only — not a prediction.
-  const num = Math.floor(Math.random()*10);
-  document.getElementById("number").textContent = num;
+function randomDemoNumber(){
+ return Math.floor(Math.random()*10);
+}
 
-  historyData.unshift({
-    period:makePeriod(),
-    number:num
-  });
+function createNewRound(){
+ round++;
+ remaining = ROUND_SECONDS;
+ roundEl.textContent = String(round).padStart(4,"0");
+ const n = randomDemoNumber();
+ numberEl.textContent = n;
 
-  historyData = historyData.slice(0,8);
-  renderHistory();
+ historyData.unshift({round:round,number:n});
+ historyData = historyData.slice(0,10);
+ renderHistory();
+ updateTimer();
 }
 
 function renderHistory(){
-  const box = document.getElementById("history");
-  box.innerHTML = "";
+ historyEl.innerHTML = "";
 
-  historyData.forEach(item=>{
-    const row = document.createElement("div");
-    row.className = "history-row";
+ historyData.forEach(item=>{
+  const row = document.createElement("div");
+  row.className = "row";
 
-    const period = document.createElement("span");
-    period.textContent = item.period;
+  const left = document.createElement("span");
+  left.textContent = "ROUND " + String(item.round).padStart(4,"0");
 
-    const number = document.createElement("span");
-    number.className = "history-num";
-    number.textContent = item.number;
+  const right = document.createElement("span");
+  right.className = "hnum";
+  right.textContent = item.number;
 
-    row.appendChild(period);
-    row.appendChild(number);
-    box.appendChild(row);
-  });
+  row.append(left,right);
+  historyEl.appendChild(row);
+ });
 }
 
-function newCycle(){
-  cycle++;
-  remaining = PERIOD_LENGTH;
-  updatePeriod();
-  updateTimer();
-  generateDemoNumber();
-}
-
-updatePeriod();
+// Initial demo round
+roundEl.textContent = String(round).padStart(4,"0");
+numberEl.textContent = randomDemoNumber();
 updateTimer();
-generateDemoNumber();
 
 setInterval(()=>{
-  remaining--;
+ remaining--;
 
-  if(remaining <= 0){
-    newCycle();
-  } else {
-    updateTimer();
-  }
+ if(remaining <= 0){
+  createNewRound();
+ }else{
+  updateTimer();
+ }
 },1000);
 </script>
+
 </body>
 </html>
