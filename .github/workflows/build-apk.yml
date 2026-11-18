@@ -23,19 +23,31 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Gradle
+      - name: Setup Gradle 8.9
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install SDK Packages
+      - name: Find Android SDK Manager
+        shell: bash
         run: |
-          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -n 1)
+          echo "SDKMANAGER=$SDKMANAGER" >> "$GITHUB_ENV"
+          echo "Found SDK Manager"
 
-      - name: Build APK
+      - name: Accept SDK Licenses
+        run: yes | "$SDKMANAGER" --licenses || true
+
+      - name: Install Android Platform
+        run: "$SDKMANAGER" --install 'platforms;android-35'
+
+      - name: Install Android Build Tools
+        run: "$SDKMANAGER" --install 'build-tools;35.0.0'
+
+      - name: Install Platform Tools
+        run: "$SDKMAN" --install 'platform-tools'
+
+      - name: Build Debug APK
         run: gradle assembleDebug
 
       - name: Upload APK
